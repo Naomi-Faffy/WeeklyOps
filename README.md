@@ -74,12 +74,15 @@ To enable live API integration and automated email dispatch, add the following s
 ### 1. Live API Credentials (Optional)
 | Secret Name | Description | Example |
 |---|---|---|
+| `SDP_INSTANCE_URL` | ServiceDesk Plus instance URL | `https://zhdconsulting.sdpondemand.manageengine.com/app/itdesk` |
+| `SDP_CLIENT_ID` | Zoho OAuth Client ID | `1000.VNUF52TNICBTRJ9O71J94O04MK6CNA` |
+| `SDP_CLIENT_SECRET` | Zoho OAuth Client Secret | `...` |
+| `SDP_REFRESH_TOKEN` | Zoho OAuth Refresh Token | `...` |
+| `SDP_ZOHO_REGION` | Zoho account region (default `com`) | `com` |
 | `HUBSPOT_ACCESS_TOKEN` | HubSpot Private App access token | `pat-na1-...` |
 | `JIRA_DOMAIN` | Atlassian domain hostname | `yourcompany.atlassian.net` |
 | `JIRA_EMAIL` | Atlassian user email address | `user@company.com` |
 | `JIRA_API_TOKEN` | Atlassian API token | `ATATT3...` |
-| `SERVICEDESK_BASE_URL` | Service Desk instance URL | `https://servicedesk.yourcompany.com` |
-| `SERVICEDESK_AUTH_TOKEN` | ManageEngine API token / OAuth token | `...` |
 
 ### 2. Email Delivery (Optional)
 | Secret Name | Description | Example |
@@ -115,3 +118,4 @@ To run the pipeline locally on your machine:
    ```
 
 The generated PowerPoint deck and charts will be created in `AERP_Outputs/`.
+

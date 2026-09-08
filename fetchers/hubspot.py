@@ -54,11 +54,11 @@ def fetch_rfqs() -> pd.DataFrame:
                             "Ticket number": item.get("id", ""),
                             "Ticket owner": props.get("hubspot_owner_id", ""),
                         })
-                    print(f"  ✓ [HubSpot] Fetched {len(rows)} RFQ tickets via live API")
+                    print(f"  [OK] [HubSpot] Fetched {len(rows)} RFQ tickets via live API")
                     return pd.DataFrame(rows)
-            print(f"  ⚠ [HubSpot] Tickets API returned HTTP {resp.status_code}, falling back to RFQs.xlsx")
+            print(f"  [WARN] [HubSpot] Tickets API returned HTTP {resp.status_code}, falling back to RFQs.xlsx")
         except Exception as e:
-            print(f"  ⚠ [HubSpot] Tickets API error ({e}), falling back to RFQs.xlsx")
+            print(f"  [WARN] [HubSpot] Tickets API error ({e}), falling back to RFQs.xlsx")
 
     # Local fallback
     fallback_path = HUBSPOT_DIR / "RFQs.xlsx"
@@ -68,7 +68,7 @@ def fetch_rfqs() -> pd.DataFrame:
             df["Created Date"] = df["Create date"]
         return df
 
-    print("  ⚠ [HubSpot] Fallback file RFQs.xlsx not found, returning empty DataFrame")
+    print("  [WARN] [HubSpot] Fallback file RFQs.xlsx not found, returning empty DataFrame")
     return pd.DataFrame(columns=["Ticket name", "Created Date", "Ticket status", "Ticket number"])
 
 
@@ -98,11 +98,11 @@ def fetch_sales() -> pd.DataFrame:
                             "AMOUNT": props.get("amount", 0),
                             "COMMENTS": props.get("description", "") or "",
                         })
-                    print(f"  ✓ [HubSpot] Fetched {len(rows)} sales deals via live API")
+                    print(f"  [OK] [HubSpot] Fetched {len(rows)} sales deals via live API")
                     return pd.DataFrame(rows)
-            print(f"  ⚠ [HubSpot] Deals API returned HTTP {resp.status_code}, falling back to HW Sales.xlsx")
+            print(f"  [WARN] [HubSpot] Deals API returned HTTP {resp.status_code}, falling back to HW Sales.xlsx")
         except Exception as e:
-            print(f"  ⚠ [HubSpot] Deals API error ({e}), falling back to HW Sales.xlsx")
+            print(f"  [WARN] [HubSpot] Deals API error ({e}), falling back to HW Sales.xlsx")
 
     # Local fallback
     fallback_path = HUBSPOT_DIR / "HW Sales.xlsx"
@@ -117,6 +117,6 @@ def fetch_sales() -> pd.DataFrame:
             df["COMMENTS"] = ""
         return df
 
-    print("  ⚠ [HubSpot] Fallback file HW Sales.xlsx not found, returning empty DataFrame")
+    print("  [WARN] [HubSpot] Fallback file HW Sales.xlsx not found, returning empty DataFrame")
     return pd.DataFrame(columns=["SALE_DATE", "UNITS_SOLD", "COMMENTS"])
 

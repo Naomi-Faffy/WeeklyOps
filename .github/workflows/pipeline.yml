@@ -41,6 +41,11 @@ jobs:
           JIRA_DOMAIN: ${{ secrets.JIRA_DOMAIN }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          SDP_INSTANCE_URL: ${{ secrets.SDP_INSTANCE_URL }}
+          SDP_CLIENT_ID: ${{ secrets.SDP_CLIENT_ID }}
+          SDP_CLIENT_SECRET: ${{ secrets.SDP_CLIENT_SECRET }}
+          SDP_REFRESH_TOKEN: ${{ secrets.SDP_REFRESH_TOKEN }}
+          SDP_ZOHO_REGION: ${{ secrets.SDP_ZOHO_REGION }}
           SERVICEDESK_BASE_URL: ${{ secrets.SERVICEDESK_BASE_URL }}
           SERVICEDESK_AUTH_TOKEN: ${{ secrets.SERVICEDESK_AUTH_TOKEN }}
 
