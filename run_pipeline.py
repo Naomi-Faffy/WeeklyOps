@@ -1,3 +1,8 @@
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -304,7 +309,7 @@ print(f"Logs folder:   {AERP14_LOG_DIR}")
 # ---------------------------------------------------------
 # Maps each Service Desk export path to a live-API fetcher and intercepts
 # pd.read_excel for those paths. Every downstream section below runs
-# UNCHANGED — only where the data comes from is swapped (API first, and the
+# UNCHANGED - only where the data comes from is swapped (API first, and the
 # fetcher falls back to the Excel file if the API is unavailable).
 # =========================================================
 from pathlib import Path as _Path
@@ -436,8 +441,8 @@ daily_counts = (
     df_week.groupby("date_only")
     .size()
     .reindex(week_days, fill_value=0)
-    .rename_axis("date_only")          # ✅ forces the index name
-    .reset_index(name="count")         # ✅ now column will be 'date_only'
+    .rename_axis("date_only")          # [COMPLETE] forces the index name
+    .reset_index(name="count")         # [COMPLETE] now column will be 'date_only'
 )
 
 daily_counts["day_label"] = daily_counts["date_only"].dt.strftime("%a")
@@ -620,7 +625,7 @@ df = df.dropna(subset=["created_dt"]).copy()
 df["date_only"] = df["created_dt"].dt.normalize()
 
 # ============================
-# LAST 5 WORKING DAYS (MON–FRI)
+# LAST 5 WORKING DAYS (MON-FRI)
 # ============================
 end_date = df["date_only"].max()
 last_5_workdays = pd.bdate_range(end=end_date, periods=5)
@@ -726,7 +731,7 @@ for i, (lab, val, col) in enumerate(zip(labels, values, colors)):
 start_date = last_5_workdays.min()
 ax.text(
     0.5, 0.06,
-    f"Last 5 Working Days: {start_date.strftime('%b %d, %Y')} – {end_date.strftime('%b %d, %Y')}",
+    f"Last 5 Working Days: {start_date.strftime('%b %d, %Y')} - {end_date.strftime('%b %d, %Y')}",
     ha="center",
     va="center",
     fontsize=12,
@@ -1085,7 +1090,7 @@ df = df.dropna(subset=["created_dt"]).copy()
 df["date_only"] = df["created_dt"].dt.normalize()
 
 # ============================================================
-# LAST 5 WORKING DAYS (MON–FRI)
+# LAST 5 WORKING DAYS (MON-FRI)
 # ============================================================
 end_date = df["date_only"].max()
 last_5_workdays = pd.bdate_range(end=end_date, periods=5)
@@ -1512,7 +1517,7 @@ plt.bar(site_counts.index.astype(str), site_counts.values, color=colors, width=0
 start_str = week_days.min().strftime("%d %b %Y")
 end_str   = week_days.max().strftime("%d %b %Y")
 
-plt.title(f"Tickets by Site ({start_str} – {end_str})", fontweight="bold", color="#22489A")
+plt.title(f"Tickets by Site ({start_str} - {end_str})", fontweight="bold", color="#22489A")
 plt.xlabel("Site")
 plt.ylabel("Tickets")
 plt.ylim(0, max(site_counts.values) + 2)
@@ -1740,18 +1745,18 @@ weekly["TOTAL"] = weekly["HPA"] + weekly["Support"]
 
 
 # =========================
-# 7) LINE GRAPH — TWO LINES
+# 7) LINE GRAPH - TWO LINES
 # =========================
 fig, ax = plt.subplots(figsize=(16, 6), dpi=120)
 
-# HPA line — green
+# HPA line - green
 ax.plot(
     weekly["ISO_WEEK"], weekly["HPA"],
     linewidth=2.8, marker="o", markersize=5,
     color=PRIMARY_GREEN, label="HPA"
 )
 
-# Support line — blue
+# Support line - blue
 ax.plot(
     weekly["ISO_WEEK"], weekly["Support"],
     linewidth=2.8, marker="s", markersize=5,
@@ -1761,7 +1766,7 @@ ax.plot(
 # Target line
 ax.axhline(y=14, color='red', linestyle='--', linewidth=1.8, label='Target (14 tickets/week)')
 
-ax.set_title("Weekly Ticket Trend by Group – Year 2026", fontsize=15, fontweight="bold")
+ax.set_title("Weekly Ticket Trend by Group - Year 2026", fontsize=15, fontweight="bold")
 ax.set_xlabel("Week Number")
 ax.set_ylabel("Number of Tickets")
 
@@ -2035,7 +2040,7 @@ plt.plot(
     label="Non billable"
 )
 
-plt.title("Weekly Ticket Trend (2026) — Billable vs Non billable", fontsize=15, fontweight="bold")
+plt.title("Weekly Ticket Trend (2026) - Billable vs Non billable", fontsize=15, fontweight="bold")
 plt.xlabel("Week Number")
 plt.ylabel("Number of Tickets")
 
@@ -2238,7 +2243,7 @@ for i, (title, value, color) in enumerate(tiles):
 
 ax.text(
     0.5, 0.12,
-    f"Last 5 Working Days: {start_str} – {end_str}",
+    f"Last 5 Working Days: {start_str} - {end_str}",
     ha="center",
     va="center",
     fontsize=12,
@@ -2337,8 +2342,8 @@ df["worklog_type"] = df["worklog_type"].astype(str).str.strip()
 df["worklog_type_norm"] = df["worklog_type"].str.lower().str.strip()
 
 # =========================
-# AUTO-PICK THE LATEST MON–FRI WEEK IN THE DATA
-# (Your file is 19–23 Jan 2026, so it will pick that)
+# AUTO-PICK THE LATEST MON-FRI WEEK IN THE DATA
+# (Your file is 19-23 Jan 2026, so it will pick that)
 # =========================
 df["date_only"] = df["created_time"].dt.normalize()
 end_date = df["date_only"].max()
@@ -2820,7 +2825,7 @@ def _styler_to_png(styler_obj, png_name):
             capture_output=True, timeout=30
         )
         if _png_p.exists() and _png_p.stat().st_size > 5000:
-            print(f"  ✓ {png_name}.png saved via wkhtmltoimage")
+            print(f"  [OK] {png_name}.png saved via wkhtmltoimage")
             return
     except Exception: pass
     # Fallback: render table as matplotlib figure
@@ -2846,7 +2851,7 @@ def _styler_to_png(styler_obj, png_name):
     _plt.tight_layout()
     _plt.savefig(_png_p, dpi=150, bbox_inches="tight")
     _plt.close(_fig)
-    print(f"  ✓ {png_name}.png saved via matplotlib fallback")
+    print(f"  [OK] {png_name}.png saved via matplotlib fallback")
 
 if not df_billable.empty:
     _styler_to_png(style_table(final_billable), "table_billable")
@@ -3206,7 +3211,7 @@ def plot_jira_file(file_path, output_folder, title, filename):
 
         for ci, cell_val in enumerate(data_cells):
             col_idx   = ci + col_offset
-            cell_text = str(cell_val) if pd.notna(cell_val) else "—"
+            cell_text = str(cell_val) if pd.notna(cell_val) else "-"
 
             if ci == 1:
                 max_len = 65 if has_type else 72
@@ -3515,7 +3520,7 @@ plt.plot(
     color=PRIMARY_GREEN
 )
 
-plt.title(f"{TARGET_YEAR} RFQs – Count per Week", fontsize=18, fontweight="bold", color=PRIMARY_BLUE)
+plt.title(f"{TARGET_YEAR} RFQs - Count per Week", fontsize=18, fontweight="bold", color=PRIMARY_BLUE)
 plt.xlabel(f"Week ({TARGET_YEAR})", fontsize=12)
 plt.ylabel("Number of RFQs", fontsize=12)
 
@@ -3550,7 +3555,7 @@ warnings.filterwarnings("ignore")
 # =========================
 # SETTINGS
 # =========================
-# ✅ RFQ years to include up to 2026
+# [COMPLETE] RFQ years to include up to 2026
 MIN_YEAR = 2022
 MAX_YEAR = 2026
 
@@ -3992,7 +3997,7 @@ for p in sorted((AERP14_TABLE_DIR / "png").glob("*.png")):
 
 
 # =========================================================
-# AERP-10  PPT GENERATOR  — ZHD TEMPLATE (title-based, v5)
+# AERP-10  PPT GENERATOR  - ZHD TEMPLATE (title-based, v5)
 # Finds each slide by its TITLE so slide order/count
 # in the template does not matter.
 # =========================================================
@@ -4070,7 +4075,7 @@ def _html_to_png(stem):
         idx = {"table_billable": 0, "table_contractual": 1}.get(stem, 0)
         html_hits = [all_html[idx]] if idx < len(all_html) else []
     if not html_hits:
-        print(f"  ⚠  No HTML found for {stem}")
+        print(f"  [WARN]  No HTML found for {stem}")
         return None
     try:
         subprocess.run(
@@ -4079,10 +4084,10 @@ def _html_to_png(stem):
             capture_output=True, timeout=30
         )
         if out.exists() and out.stat().st_size > 0:
-            print(f"  ✓  {stem} → PNG")
+            print(f"  [OK]  {stem} → PNG")
             return out
     except Exception as e:
-        print(f"  ⚠  wkhtmltoimage: {e}")
+        print(f"  [WARN]  wkhtmltoimage: {e}")
     return None
 
 def _replace_pic(slide, pic_index, img_path):
@@ -4190,20 +4195,20 @@ def _stack_v(*paths, gap=20):
     return out
 
 ASSETS = {
-    # Slide: Ticket Review – Volume & Closure Rate
+    # Slide: Ticket Review - Volume & Closure Rate
     "s3_topleft_bar":      _asset("chart_ticket_volume_daily.png",   "chart_001_*.png"),
     "s3_topright_small":   _asset("chart_ticket_kpi_tiles.png",      "chart_002_*.png"),
     "s3_bottom_line":      _asset("chart_tickets_opened_closed.png", "chart_003_*.png"),
-    # Slide: Ticket Review – In Queue (single chart only)
+    # Slide: Ticket Review - In Queue (single chart only)
     "s4_inqueue":          _asset("chart_tickets_by_date.png",       "chart_004_*.png"),
-    # Slide: Ticket Review – In Queue (legacy slot, kept for fallback matching)
+    # Slide: Ticket Review - In Queue (legacy slot, kept for fallback matching)
     "s5_inqueue":          _asset("chart_tickets_by_date.png",       "chart_004_*.png"),
-    # Slide: Ticket Review – Last 7 Days
+    # Slide: Ticket Review - Last 7 Days
     "s6_last7days":        _asset("chart_tickets_by_site.png",       "chart_005_*.png"),
-    # Slide: Tickets – Weekly Tracking
+    # Slide: Tickets - Weekly Tracking
     "s7_top_trend":        _asset("chart_ytd_ticket_trend.png",      "chart_006_*.png"),
     "s7_bot_opened":       _asset("chart_ytd_billing_split.png",     "chart_007_*.png"),
-    # Slide: Billing Status – Weekly & Worklogs
+    # Slide: Billing Status - Weekly & Worklogs
     "s8_kpi_small":        _asset("chart_billing_kpi_tiles.png",     "chart_008_*.png"),
     "s8_billable_lines":   _asset("chart_billable_daily_lines.png",  "chart_009_*.png"),
     "s8_worklog_bar":      _stack_v(
@@ -4211,9 +4216,9 @@ ASSETS = {
                                 _asset("chart_ytd_billing_split.png",    "chart_007_*.png"),
                                 _asset("chart_billable_daily_lines.png", "chart_009_*.png"),
                             ),
-    # Slide: Billing Status – Last Week & Worklogs
+    # Slide: Billing Status - Last Week & Worklogs
     "s9_worklog":          _asset("chart_worklog_bar_pie.png",       "chart_010_*.png"),
-    # Slide: Billing Status – Last Week  (pic[2] and pic[3] — skipping tiny icons at 0,1)
+    # Slide: Billing Status - Last Week  (pic[2] and pic[3] - skipping tiny icons at 0,1)
     "s10_billable_tbl":    _exact("table_billable.png") or _html_to_png("table_billable"),
     "s10_contractual_tbl": _exact("table_contractual.png") or _html_to_png("table_contractual"),
     # Slide: Survey
@@ -4234,32 +4239,32 @@ ASSETS = {
 
 missing = [k for k, v in ASSETS.items() if v is None]
 if missing:
-    print(f"\n⚠  Missing assets: {missing}")
+    print(f"\n[WARN]  Missing assets: {missing}")
 else:
-    print(f"\n✅  All {len(ASSETS)} assets resolved")
+    print(f"\n[COMPLETE]  All {len(ASSETS)} assets resolved")
 
 # ─── TITLE-BASED SLIDE MAP ────────────────────────────────
 # Format: (title_fragment, pic_index, asset_key)
 # title_fragment matched case-insensitively against slide title text
 TITLE_SLIDE_MAP = [
-    # Ticket Review – Volume & Closure Rate  (3 slots, XML order: topright, topleft, bottom)
+    # Ticket Review - Volume & Closure Rate  (3 slots, XML order: topright, topleft, bottom)
     ("Volume &Closure Rate",     0, "s3_topright_small"),
     ("Volume &Closure Rate",     1, "s3_topleft_bar"),
     ("Volume &Closure Rate",     2, "s3_bottom_line"),
-    # Ticket Review – In Queue (single chart only)
+    # Ticket Review - In Queue (single chart only)
     ("In Queue",                 0, "s4_inqueue"),
-    # Ticket Review – Last 7 Days
+    # Ticket Review - Last 7 Days
     ("Last 7 Days",              0, "s6_last7days"),
-    # Tickets – Weekly Tracking
+    # Tickets - Weekly Tracking
     ("Weekly Tracking",          0, "s7_top_trend"),
     ("Weekly Tracking",          1, "s7_bot_opened"),
-    # Billing Status – Weekly & Worklogs
+    # Billing Status - Weekly & Worklogs
     ("Weekly &Worklogs",         0, "s8_kpi_small"),
     ("Weekly &Worklogs",         1, "s8_billable_lines"),
     # slots [2] and [3] merged into slot [1] via _stack_v above
-    # Billing Status – Last Week & Worklogs
+    # Billing Status - Last Week & Worklogs
     ("Last Week &Worklogs",      0, "s9_worklog"),
-    # Billing Status – Last Week (tiny icons at 0,1 are skipped; real slots at 2,3)
+    # Billing Status - Last Week (tiny icons at 0,1 are skipped; real slots at 2,3)
     ("Status-Last Week",         2, "s10_billable_tbl"),
     ("Status-Last Week",         3, "s10_contractual_tbl"),
     # Survey
@@ -4310,31 +4315,31 @@ for title_frag, pic_idx, asset_key in TITLE_SLIDE_MAP:
     slide = _slide_cache[title_frag]
 
     if slide is None:
-        print(f"  –  No slide matching '{title_frag}' (skipped)")
+        print(f"  -  No slide matching '{title_frag}' (skipped)")
         skipped += 1
         continue
 
     img = ASSETS.get(asset_key)
     if img is None:
         slide_num = list(prs.slides).index(slide) + 1
-        print(f"  –  Slide {slide_num} '{title_frag}'[{pic_idx}] ({asset_key}): asset missing")
+        print(f"  -  Slide {slide_num} '{title_frag}'[{pic_idx}] ({asset_key}): asset missing")
         skipped += 1
         continue
 
     slide_num = list(prs.slides).index(slide) + 1
     try:
         _replace_pic(slide, pic_idx, img)
-        print(f"  ✓  Slide {slide_num} '{title_frag[:30]}'[{pic_idx}] ← {Path(img).name}")
+        print(f"  [OK]  Slide {slide_num} '{title_frag[:30]}'[{pic_idx}] ← {Path(img).name}")
         filled += 1
     except Exception as e:
-        print(f"  ✗  Slide {slide_num} '{title_frag}'[{pic_idx}] ({asset_key}): {e}")
+        print(f"  [FAIL]  Slide {slide_num} '{title_frag}'[{pic_idx}] ({asset_key}): {e}")
         skipped += 1
 
 prs.save(str(PPT_PATH))
 print(f"\n{'='*60}")
 print(f"Saved → {PPT_PATH}")
 print(f"Filled: {filled}  |  Skipped: {skipped}")
-print("ZHD WEEKLY OPS REPORT COMPLETE ✅")
+print("ZHD WEEKLY OPS REPORT COMPLETE [COMPLETE]")
 
 try:
     from store_report import archive_pipeline_run
@@ -4381,9 +4386,9 @@ def send_email():
                 server.ehlo()
             server.login(smtp_user, smtp_password)
             server.send_message(msg)
-        print(f"  ✓ Report successfully sent to {email_to} via SMTP")
+        print(f"  [OK] Report successfully sent to {email_to} via SMTP")
     except Exception as e:
-        print(f"  ⚠ Failed to send email via SMTP: {e}")
+        print(f"  [WARN] Failed to send email via SMTP: {e}")
 
 send_email()
 

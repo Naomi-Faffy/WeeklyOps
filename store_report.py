@@ -28,7 +28,7 @@ def archive_pipeline_run(pptx_path=None):
 
     try:
         shutil.copy2(path, target)
-        print(f"  ✓ Report archived to: {target}")
+        print(f"  [OK] Report archived to: {target}")
     except Exception as e:
-        print(f"  ⚠ Failed to archive report: {e}")
+        print(f"  [WARN] Failed to archive report: {e}")
 

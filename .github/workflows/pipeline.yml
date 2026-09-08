@@ -45,15 +45,22 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
 
-          # Pipeline Settings
+          # Pipeline Settings & Encodings
+          PYTHONIOENCODING: "utf-8"
           AERP_SILENT: "0"
           AERP_VERBOSE_PRINT_LOG: "1"
         run: |
           py -3.9 run_pipeline.py
 
+      - name: Deliver Report Locally to Desktop
+        if: always()
+        run: |
+          py -3.9 -c "import glob, shutil, os, sys; (lambda pptx: (shutil.copy2(pptx[-1], os.path.join(os.path.expanduser('~'), 'Desktop')) and print('[OK] Copied latest report to Desktop:', pptx[-1])) if pptx else print('[WARN] No PPTX found'))(sorted(glob.glob('AERP_Outputs/*.pptx')))"
+
       - name: Upload Generated Report & Outputs as Artifact
         uses: actions/upload-artifact@v4
         if: always()
+        continue-on-error: true
         with:
           name: weekly-ops-report-${{ github.run_number }}
           path: |
@@ -61,4 +68,4 @@ jobs:
             AERP_Outputs/output_manifest_*.csv
             AERP_Outputs/charts/
             AERP_Outputs/logs/
-          retention-days: 30
+          retention-days: 7
