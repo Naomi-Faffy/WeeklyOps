@@ -73,16 +73,3 @@ jobs:
           else:
               print('[WARN] No PPTX found in AERP_Outputs')
           "
-
-      - name: Upload Generated Report & Outputs as Artifact (Optional Cloud Backup)
-        uses: actions/upload-artifact@v4
-        if: always()
-        continue-on-error: true
-        with:
-          name: weekly-ops-report-${{ github.run_number }}
-          path: |
-            AERP_Outputs/*.pptx
-            AERP_Outputs/output_manifest_*.csv
-            AERP_Outputs/charts/
-            AERP_Outputs/logs/
-          retention-days: 7
