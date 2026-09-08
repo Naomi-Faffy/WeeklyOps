@@ -52,12 +52,29 @@ jobs:
         run: |
           py -3.9 run_pipeline.py
 
-      - name: Deliver Report Locally to Desktop
+      - name: Deliver Report Locally (Desktop & OneDrive)
         if: always()
         run: |
-          py -3.9 -c "import glob, shutil, os, sys; (lambda pptx: (shutil.copy2(pptx[-1], os.path.join(os.path.expanduser('~'), 'Desktop')) and print('[OK] Copied latest report to Desktop:', pptx[-1])) if pptx else print('[WARN] No PPTX found'))(sorted(glob.glob('AERP_Outputs/*.pptx')))"
+          py -3.9 -c "
+          import glob, shutil, os, sys
+          sys.stdout.reconfigure(encoding='utf-8')
+          pptx_files = sorted(glob.glob('AERP_Outputs/*.pptx'))
+          if pptx_files:
+              latest = pptx_files[-1]
+              filename = os.path.basename(latest)
+              desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
+              onedrive = r'C:\Users\TafaraChitiyo-I-\OneDrive - ZHD Consulting\Automation_Project\reports'
+              if os.path.exists(desktop):
+                  shutil.copy2(latest, os.path.join(desktop, filename))
+                  print(f'[OK] Delivered to Desktop: {filename}')
+              if os.path.exists(onedrive):
+                  shutil.copy2(latest, os.path.join(onedrive, filename))
+                  print(f'[OK] Delivered to OneDrive reports: {filename}')
+          else:
+              print('[WARN] No PPTX found in AERP_Outputs')
+          "
 
-      - name: Upload Generated Report & Outputs as Artifact
+      - name: Upload Generated Report & Outputs as Artifact (Optional Cloud Backup)
         uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true
