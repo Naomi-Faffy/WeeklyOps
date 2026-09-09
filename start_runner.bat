@@ -5,6 +5,5 @@ echo Starting GitHub Actions Self-Hosted Runner
 echo Listening for WeeklyOps automated workflow runs...
 echo ===================================================
 cd /d "C:\Users\TafaraChitiyo-I-\actions-runner"
-call run.cmd
+py runner_loop.py
 pause
-

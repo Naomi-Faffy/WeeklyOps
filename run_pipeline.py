@@ -4356,18 +4356,19 @@ import smtplib
 from email.message import EmailMessage
 
 def send_email():
-    smtp_server = os.environ.get("SMTP_SERVER", "").strip()
-    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
-    smtp_user = os.environ.get("SMTP_USER", "").strip()
-    smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
-    email_to = os.environ.get("EMAIL_TO", "tafara@zhdconsulting.com").strip()
-
-    if not (smtp_server and smtp_user and smtp_password):
-        print("\nNote: SMTP credentials not configured (SMTP_SERVER, SMTP_USER, SMTP_PASSWORD). Skipping email send.")
-        print(f"Generated presentation saved locally: {PPT_PATH}")
-        return
-
     try:
+        smtp_server = os.environ.get("SMTP_SERVER", "").strip()
+        raw_port = os.environ.get("SMTP_PORT", "").strip()
+        smtp_port = int(raw_port) if raw_port.isdigit() else 587
+        smtp_user = os.environ.get("SMTP_USER", "").strip()
+        smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
+        email_to = os.environ.get("EMAIL_TO", "tafara@zhdconsulting.com").strip()
+
+        if not (smtp_server and smtp_user and smtp_password):
+            print("\nNote: SMTP credentials not configured (SMTP_SERVER, SMTP_USER, SMTP_PASSWORD). Skipping email send.")
+            print(f"Generated presentation saved locally: {PPT_PATH}")
+            return
+
         msg = EmailMessage()
         msg["Subject"] = "Weekly Operations Report"
         msg["From"] = smtp_user
