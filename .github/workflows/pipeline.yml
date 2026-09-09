@@ -4,9 +4,9 @@ on:
   # Manual trigger with button in GitHub Actions UI
   workflow_dispatch:
 
-  # Scheduled trigger: Every Monday morning at 06:00 UTC (08:00 AM Central/South Africa Time)
+  # Scheduled trigger: Every Friday at 15:50 hrs local time (13:50 UTC)
   schedule:
-    - cron: '0 6 * * 1'
+    - cron: '50 13 * * 5'
 
 jobs:
   build-and-run:
@@ -63,13 +63,13 @@ jobs:
               latest = pptx_files[-1]
               filename = os.path.basename(latest)
               desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
-              onedrive = r'C:\Users\TafaraChitiyo-I-\OneDrive - ZHD Consulting\Automation_Project\reports'
+              onedrive = r'C:\Users\TafaraChitiyo-I-\OneDrive - ZHD Consulting\Automation_Project\AERP_Outputs'
               if os.path.exists(desktop):
                   shutil.copy2(latest, os.path.join(desktop, filename))
                   print(f'[OK] Delivered to Desktop: {filename}')
               if os.path.exists(onedrive):
                   shutil.copy2(latest, os.path.join(onedrive, filename))
-                  print(f'[OK] Delivered to OneDrive reports: {filename}')
+                  print(f'[OK] Delivered to OneDrive AERP_Outputs: {filename}')
           else:
               print('[WARN] No PPTX found in AERP_Outputs')
           "

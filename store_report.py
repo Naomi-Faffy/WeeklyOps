@@ -32,3 +32,12 @@ def archive_pipeline_run(pptx_path=None):
     except Exception as e:
         print(f"  [WARN] Failed to archive report: {e}")
 
+    # Copy to user's OneDrive AERP_Outputs directory
+    onedrive_dir = Path(r"C:\Users\TafaraChitiyo-I-\OneDrive - ZHD Consulting\Automation_Project\AERP_Outputs")
+    if onedrive_dir.exists():
+        try:
+            shutil.copy2(path, onedrive_dir / path.name)
+            print(f"  [OK] Report saved to OneDrive AERP_Outputs: {onedrive_dir / path.name}")
+        except Exception as e:
+            print(f"  [WARN] Failed to copy to OneDrive AERP_Outputs: {e}")
+
